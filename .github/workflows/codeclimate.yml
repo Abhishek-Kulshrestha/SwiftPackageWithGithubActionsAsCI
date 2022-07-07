@@ -17,12 +17,20 @@ jobs:
       - name: Build Package
         run: swift build -v
        
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v3.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
-        with:
-          coverageCommand: swift test --enable-code-coverage
-          debug: true
-          coverageLocations: |
-            ${{github.workspace}}/.build/debug/codecov/*.json:lcov-json
+       
+      - name: Run tests
+        run: swift test --enable-code-coverage
+
+      -  name: Test coverage
+         uses: maxep/spm-lcov-action@0.3.0
+         with:
+           output-file: ./coverage/lcov.info
+      #- name: Test & publish code coverage
+        #uses: paambaati/codeclimate-action@v3.0.0
+        #env:
+          #CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
+        #with:
+          #coverageCommand: swift test --enable-code-coverage
+          #debug: true
+          #coverageLocations: |
+            #${{github.workspace}}/.build/debug/codecov/*.json:lcov-json
